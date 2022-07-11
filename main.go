@@ -4,87 +4,76 @@ import (
 	"fmt"
 )
 
-type animal struct {
-	name     string
-	species  string
-	weight   int
-	food     int
-	onweight int
+type dog struct {
+	name   string
+	weight float64
 }
-
-type farm struct {
-	animals []animal
+type cat struct {
+	name   string
+	weight float64
+}
+type cow struct {
+	name   string
+	weight float64
 }
 
 type Animal interface {
 	getAnimalName() string
-	getAnimalSpecies() string
-	getAnimalWeight() int
-	getAnimalEatsByKg() float64
+	getAnimalWeight() float64
+	getAnimalFeedByMonth() float64
 }
 
-type Farm interface {
-	getAnimals() []animal
-	getAnimalsCount() int
+func (d dog) getAnimalName() string {
+	return d.name
+}
+func (c cat) getAnimalName() string {
+	return c.name
+}
+func (c cow) getAnimalName() string {
+	return c.name
 }
 
-func (f farm) getAnimals() []animal {
-	return f.animals
+func (d dog) getAnimalWeight() float64 {
+	return d.weight
 }
-func (f farm) getAnimalsCount() int {
-	var countAnimals int
-	for i, _ := range f.animals {
-		countAnimals += i
-	}
-	return countAnimals
+func (c cat) getAnimalWeight() float64 {
+	return c.weight
 }
-
-func (a animal) getAnimalName() string {
-	return a.name
-}
-func (a animal) getAnimalSpecies() string {
-	return a.species
-}
-func (a animal) getAnimalWeight() int {
-	return a.weight
-}
-func (a animal) getAnimalEatsByKg() float64 {
-	if aw := a.onweight; aw <= 0 {
-		a.onweight = 1
-	}
-	return float64(a.food / a.onweight)
+func (c cow) getAnimalWeight() float64 {
+	return c.weight
 }
 
-func farmFeed(f Farm) float64 {
-	var i Animal
-	var s float64
-	animals := f.getAnimals()
+func (d dog) getAnimalFeedByMonth() float64 {
+	return d.weight / 5 * 10
+}
+func (c cat) getAnimalFeedByMonth() float64 {
+	return c.weight * 7
+}
+func (c cow) getAnimalFeedByMonth() float64 {
+	return c.weight * 25
+}
 
+func farmFeed(animals []Animal) float64 {
+	s := 0.0
 	for _, a := range animals {
-		i = &a
-		feedByAnimal := i.getAnimalEatsByKg() * float64(i.getAnimalWeight())
-		fmt.Printf("Food consumption by %v %q weighing %v kg in total is %v kg \n", i.getAnimalSpecies(), i.getAnimalName(), i.getAnimalWeight(), feedByAnimal)
-		s += feedByAnimal
+		fmt.Printf("Food consumption by %q weighing %v kg in total is %v kg \n", a.getAnimalName(), a.getAnimalWeight(), a.getAnimalFeedByMonth())
+		s += a.getAnimalFeedByMonth()
 	}
 	return s
 }
 
 func main() {
-	var f Farm
 
-	animals := []animal{
-		{name: "Rex", species: "dog", weight: 5, food: 10, onweight: 5},
-		{name: "Been", species: "dog", weight: 7, food: 10, onweight: 5},
-		{name: "Isis", species: "cat", weight: 4, food: 7, onweight: 1},
-		{name: "Mira", species: "cow", weight: 80, food: 25, onweight: 1},
-		{name: "Sira", species: "cow", weight: 120, food: 25, onweight: 1},
-		{name: "Bila", species: "cow", weight: 100, food: 25, onweight: 1},
+	animals := []Animal{
+		dog{name: "Rex", weight: 5},
+		dog{name: "Been", weight: 7},
+		cat{name: "Iris", weight: 4},
+		cow{name: "Mira", weight: 80},
+		cow{name: "Sira", weight: 120},
+		cow{name: "Bila", weight: 100},
 	}
 
-	myfarm := farm{animals: animals}
-	f = &myfarm
-
-	sum := farmFeed(f)
-	fmt.Printf("All animals (%v) consume together %v kg of feed\n", myfarm.getAnimalsCount(), sum)
+	sum := farmFeed(animals)
+	fmt.Printf("All animals consume together %v kg of feed\n", sum)
 
 }
