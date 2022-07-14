@@ -67,8 +67,9 @@ func (c cow) getAnimalFeedByMonth() float64 {
 func farmFeed(animals []Animal) float64 {
 	s := 0.0
 	for _, a := range animals {
-		fmt.Printf("Food consumption by %v %q weighing %v kg in total is %v kg \n", a, a.getAnimalName(), a.getAnimalWeight(), a.getAnimalFeedByMonth())
-		s += a.getAnimalFeedByMonth()
+		animalFeed := a.getAnimalFeedByMonth()
+		fmt.Printf("Food consumption by %v %q weighing %v kg in total is %v kg \n", a, a.getAnimalName(), a.getAnimalWeight(), animalFeed)
+		s += animalFeed
 	}
 	return s
 }
