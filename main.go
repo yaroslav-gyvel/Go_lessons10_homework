@@ -18,9 +18,20 @@ type cow struct {
 }
 
 type Animal interface {
+	fmt.Stringer
 	getAnimalName() string
 	getAnimalWeight() float64
 	getAnimalFeedByMonth() float64
+}
+
+func (d dog) String() string {
+	return "dog"
+}
+func (c cat) String() string {
+	return "cat"
+}
+func (c cow) String() string {
+	return "cow"
 }
 
 func (d dog) getAnimalName() string {
@@ -56,7 +67,7 @@ func (c cow) getAnimalFeedByMonth() float64 {
 func farmFeed(animals []Animal) float64 {
 	s := 0.0
 	for _, a := range animals {
-		fmt.Printf("Food consumption by %q weighing %v kg in total is %v kg \n", a.getAnimalName(), a.getAnimalWeight(), a.getAnimalFeedByMonth())
+		fmt.Printf("Food consumption by %v %q weighing %v kg in total is %v kg \n", a, a.getAnimalName(), a.getAnimalWeight(), a.getAnimalFeedByMonth())
 		s += a.getAnimalFeedByMonth()
 	}
 	return s
